@@ -1,0 +1,19 @@
+Create ItemController with basic actions
+
+Create inventory views (index, create, edit, view)
+
+Create SupplierController and views
+
+Create stock management models (StockLevel, StockMovement)
+
+Create stock views and ItemController stock methods
+
+Create GRV models (GoodsReceivedVoucher, GRVItem)
+
+Create GRVController with core workflow
+
+Create GRV views (index, create, edit, view, pending)
+
+Add routing integration and navigation updates
+
+Test basic workflow: Create item → Create GRV → Approve → Verify stock

@@ -1,0 +1,420 @@
+1. Requester
+
+Create item requests
+
+View own requests and statuses
+
+Edit/cancel request before approval
+
+View fulfilled requests and issued quantities
+
+2. Department Supervisor
+
+View all requests from their department
+
+Configure department request workflow (within allowed rules)
+
+Approve / reject department requests
+
+Delegate approval to acting supervisor (optional MVP+)
+
+View department inventory consumption reports
+
+3. Administration Manager
+
+Receive all approved department requests
+
+Approve / reject / return requests
+
+View system-wide requests
+
+View inventory availability
+
+Escalate requests to General Administration Manager
+
+4. General Administration Manager
+
+Final approval authority
+
+Approve / reject / return requests
+
+View system-wide dashboards and reports
+
+Override approvals if required
+
+5. Stores Officer
+
+Manage inventory stock
+
+Create Goods Received Vouchers (GRV)
+
+Issue items against approved requests
+
+View pending release instructions
+
+Generate issue vouchers / stock-out records
+
+2. Core System Modules (MVP)
+A. Inventory Management
+
+Item master (SKU, name, category, unit, minimum level)
+
+Stock levels per store/location
+
+Batch / lot support (optional MVP+)
+
+Stock in/out history (immutable log)
+
+B. Goods Received Voucher (GRV) – Mandatory Entry Point
+
+All inventory must enter the system via GRV
+
+Create GRV
+
+Supplier
+
+Date received
+
+Items, quantities, unit cost
+
+Reference number (PO / Donation / Transfer)
+
+Approve GRV (Admin Manager or Stores Officer)
+
+Auto-update inventory upon GRV approval
+
+GRV cannot be edited after approval
+
+C. Item Request Management
+
+Create request
+
+Department
+
+Items + quantities
+
+Purpose / justification
+
+Priority level
+
+Validate available stock
+
+Auto-route request via workflow
+
+Status tracking (Draft → Pending → Approved → Issued → Closed)
+
+3. Workflow Engine (Key MVP Feature)
+Workflow Characteristics
+
+Dynamic & configurable
+
+Workflow = ordered list of approval steps
+
+Each step assigned to:
+
+Role (not individual user)
+
+Optional conditions (amount, item category)
+
+Department Supervisor Controls
+
+Configure department workflow
+
+Number of approval steps
+
+Internal department approvals
+
+Cannot remove central admin approvals
+
+Cannot bypass Admin Manager or General Admin Manager
+
+System-Enforced Global Flow (Non-Configurable)
+
+Regardless of department workflow:
+
+Administration Manager
+
+General Administration Manager
+
+Stores Officer (release instruction)
+
+Department workflows are inserted before the Admin Manager step.
+
+4. Request Approval Flow (MVP Default)
+
+Requester submits request
+
+Department workflow approvals occur
+
+Request arrives at Administration Manager
+
+Then moves to General Administration Manager
+
+Approved request triggers Release Instruction
+
+Stores Officer issues items
+
+Request marked Fulfilled
+
+5. Stores & Issuance
+
+View approved release instructions
+
+Create Issue Voucher
+
+Request reference
+
+Items issued
+
+Quantity issued
+
+Issued by / received by
+
+Partial issuance allowed
+
+Inventory updated automatically
+
+Close request only when fully issued
+
+6. Configuration & Administration
+Global Configuration
+
+Roles and permissions
+
+Item categories
+
+Units of measure
+
+Stores / locations
+
+Approval rules (non-editable by departments)
+
+Department Configuration
+
+Department workflow setup
+
+Default approvers
+
+Approval thresholds (optional MVP+)
+
+7. Audit, Logs & Compliance (MVP Required)
+
+Immutable audit log for:
+
+Requests
+
+Approvals
+
+GRVs
+
+Issues
+
+Timestamp, user, action tracking
+
+No hard deletes (soft delete only)
+
+8. Notifications (MVP)
+
+Email / in-app notifications for:
+
+Pending approvals
+
+Request rejection/return
+
+Release instructions to stores
+
+Reminder notifications (optional MVP+)
+
+9. Reports & Dashboards (MVP)
+
+Stock on hand
+
+Stock movement (GRV vs issues)
+
+Requests by department
+
+Approval turnaround time
+
+Low stock alerts
+
+10. Non-Functional Requirements (MVP)
+
+Role-based access control (RBAC)
+
+Web-based responsive UI
+
+Secure authentication
+
+Performance: < 3s response for core actions
+
+Scalable workflow engine
+
+Configurations stored as data (not hardcoded)
+
+11. Out of Scope for MVP (Clearly Defined)
+
+Purchase order management
+
+Supplier invoicing
+
+Budgeting & financial accounting
+
+Barcode / RFID
+
+Mobile app (web only)
+
+12. Fuel Request & Fuel Coupon Management (MVP Extension)
+Conceptual Model
+
+Fuel is stored as fuel coupons, not liters
+
+Each coupon represents:
+
+Fuel type (Petrol / Diesel)
+
+Monetary value or fixed liters
+
+Fuel coupons behave like inventory items with special rules
+
+13. Fuel Coupon Inventory
+Fuel Coupon Item Type
+
+Fuel coupons are a special inventory category with:
+
+Coupon ID / Serial number
+
+Fuel type
+
+Value (amount or liters)
+
+Expiry date (optional)
+
+Status: Available / Issued / Expired / Cancelled
+
+Entry Rule (Mandatory)
+
+Fuel coupons must be added via GRV, same as other inventory
+
+GRV for fuel requires:
+
+Supplier (Fuel station / vendor)
+
+Coupon range (From–To) or quantity
+
+Total value
+
+Fuel type
+
+14. Fuel Request (Requester Side)
+Fuel Request Form
+
+Requester can create a Fuel Request with:
+
+Vehicle / equipment identifier
+
+Fuel type
+
+Requested value or quantity
+
+Purpose (mission, trip, generator, etc.)
+
+Date required
+
+Department
+
+Fuel requests use the same workflow engine as item requests.
+
+15. Fuel Request Approval Flow
+
+Fuel requests follow the same approval hierarchy:
+
+Department workflow approvals
+
+Administration Manager
+
+General Administration Manager
+
+Stores Officer (fuel coupon issuance)
+
+No parallel or shortcut flow — consistency is key.
+
+16. Stores Officer – Fuel Issuance
+Fuel Coupon Issuance
+
+View approved fuel release instructions
+
+Assign specific coupons to request
+
+Create Fuel Issue Voucher
+
+Request reference
+
+Coupon IDs issued
+
+Total value / liters
+
+Issued to (driver / requester)
+
+Mark coupons as Issued
+
+Close fuel request when fully issued
+
+Partial issuance:
+
+Allowed if coupon denominations require it
+
+System tracks outstanding balance
+
+17. Fuel-Specific Controls (MVP)
+Validation Rules
+
+Fuel requests can only be fulfilled using available coupons
+
+Coupons cannot be reused
+
+Expired coupons cannot be issued
+
+Fuel type mismatch is blocked
+
+Visibility
+
+Requester can see:
+
+Approved amount
+
+Issued coupons
+
+Admin can see:
+
+Coupon utilization
+
+Fuel consumption by department / vehicle
+
+18. Reporting (Fuel)
+
+Fuel coupons on hand (by type & value)
+
+Issued fuel by department
+
+Issued fuel by vehicle / equipment
+
+Fuel request vs issuance variance
+
+Expired / unused coupons
+
+19. Permissions Summary (Fuel)
+Role	Fuel Capabilities
+Requester	Create fuel requests, view status
+Dept Supervisor	Approve fuel requests
+Admin Manager	Approve fuel requests
+General Admin Manager	Final approval
+Stores Officer	Manage coupons, issue fuel
+20. Key Design Principle (Important)
+
+Fuel is not deducted as stock quantity — it is tracked as coupon issuance, ensuring:
+
+Strong auditability
+
+Fraud prevention
+
+Real-world alignment with operations
