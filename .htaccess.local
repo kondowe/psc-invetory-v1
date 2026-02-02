@@ -1,4 +1,5 @@
 RewriteEngine On
+RewriteBase /int/
 
 # Redirect to index.php if the requested file or directory doesn't exist
 RewriteCond %{REQUEST_FILENAME} !-f
