@@ -5,6 +5,12 @@
  * Define system-wide constants
  */
 
+// Prevent multiple inclusions
+if (defined('CONSTANTS_LOADED')) {
+    return;
+}
+define('CONSTANTS_LOADED', true);
+
 // Request Status
 define('REQUEST_STATUS_DRAFT', 'draft');
 define('REQUEST_STATUS_PENDING', 'pending');

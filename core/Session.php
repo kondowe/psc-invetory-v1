@@ -19,17 +19,23 @@ class Session
             return;
         }
 
+        // Ensure no output has been sent
+        if (headers_sent($file, $line)) {
+            trigger_error("Cannot start session - headers already sent in {$file} on line {$line}", E_USER_WARNING);
+            return false;
+        }
+
         $config = require __DIR__ . '/../config/app.php';
         self::$timeout = $config['session']['lifetime'];
 
         // Secure session configuration
-        ini_set('session.cookie_httponly', $config['session']['cookie_httponly'] ? '1' : '0');
-        ini_set('session.use_strict_mode', '1');
-        ini_set('session.cookie_secure', $config['session']['cookie_secure'] ? '1' : '0');
-        ini_set('session.cookie_samesite', $config['session']['cookie_samesite']);
-        ini_set('session.use_only_cookies', '1');
+        @ini_set('session.cookie_httponly', $config['session']['cookie_httponly'] ? '1' : '0');
+        @ini_set('session.use_strict_mode', '1');
+        @ini_set('session.cookie_secure', $config['session']['cookie_secure'] ? '1' : '0');
+        @ini_set('session.cookie_samesite', $config['session']['cookie_samesite']);
+        @ini_set('session.use_only_cookies', '1');
 
-        session_name($config['session']['name']);
+        @session_name($config['session']['name']);
         session_start();
 
         self::$started = true;
